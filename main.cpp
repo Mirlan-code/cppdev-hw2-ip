@@ -29,9 +29,8 @@ vector<string> Split(const string &str, char d) {
     return r;
 }
 
-string PrintIp(const vector<string>& ip) {
-
-
+void PrintIp(const vector<string>& ip) {
+    cout << ip[0] << '.' << ip[1] << '.' << ip[2] << '.' << ip[3] << endl;
 }
 
 int main(int, char const **) {
@@ -44,18 +43,13 @@ int main(int, char const **) {
         }
 
         sort(ip_pool.rbegin(), ip_pool.rend(), [](const vector<string>& a, const vector<string>& b) -> bool {
-            return tie(a[0], a[1], a[2], a[3]) < tie(b[0], b[1], b[2], b[3]);
+            vector<int> aInt = {stoi(a[0]), stoi(a[1]), stoi(a[2]), stoi(a[3])};
+            vector<int> bInt = {stoi(b[0]), stoi(b[1]), stoi(b[2]), stoi(b[3])};
+            return tie(aInt[0], aInt[1], aInt[2], aInt[3]) < tie(bInt[0], bInt[1], bInt[2], bInt[3]);
         });
-        // TODO reverse lexicographically sort
 
-        for (vector<vector<string>>::const_iterator ip = ip_pool.cbegin(); ip != ip_pool.cend(); ++ip) {
-            for (vector<string>::const_iterator ip_part = ip->cbegin(); ip_part != ip->cend(); ++ip_part) {
-                if (ip_part != ip->cbegin()) {
-                    cout << ".";
-                }
-                cout << *ip_part;
-            }
-            cout << endl;
+        for (auto ip : ip_pool) {
+            PrintIp(ip);
         }
 
         // 222.173.235.246
@@ -67,7 +61,17 @@ int main(int, char const **) {
         // 1.1.234.8
 
         // TODO filter by first byte and output
-        // ip = filter(1)
+
+        vector<vector<string>> filtered;
+        copy_if(ip_pool.begin(), ip_pool.end(), back_inserter(filtered), [](const vector<string>& a) {
+           return a[0] == "1";
+        });
+        for (auto i : filtered) {
+            PrintIp(i);
+        }
+        filtered.clear();
+
+
 
         // 1.231.69.33
         // 1.87.203.225
@@ -78,6 +82,14 @@ int main(int, char const **) {
         // TODO filter by first and second bytes and output
         // ip = filter(46, 70)
 
+        copy_if(ip_pool.begin(), ip_pool.end(), back_inserter(filtered), [](const vector<string>& a) {
+            return a[0] == "46" && a[1] == "70";
+        });
+        for (auto i : filtered) {
+            PrintIp(i);
+        }
+        filtered.clear();
+
         // 46.70.225.39
         // 46.70.147.26
         // 46.70.113.73
@@ -85,7 +97,15 @@ int main(int, char const **) {
 
         // TODO filter by any byte and output
         // ip = filter_any(46)
-
+        copy_if(ip_pool.begin(), ip_pool.end(), back_inserter(filtered), [](const vector<string>& a) {
+            return any_of(a.begin(), a.end(), [](const string& part){
+                return part == "46";
+            });
+        });
+        for (auto i : filtered) {
+            PrintIp(i);
+        }
+        filtered.clear();
         // 186.204.34.46
         // 186.46.222.194
         // 185.46.87.231
