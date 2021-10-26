@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.2)
 
-#if(DEFINED ENV{RUN_NUMBER})
-set(PATCH_VERSION $ENV{RUN_NUMBER} CACHE INTERNAL "Patch version")
-#else()
-#    set(PATCH_VERSION 1)
-#endif()
+if(DEFINED ENV{RUN_NUMBER})
+    set(PATCH_VERSION $ENV{RUN_NUMBER} CACHE INTERNAL "Patch version")
+else()
+    set(PATCH_VERSION 1)
+endif()
 
 configure_file(version.h.in version.h)
 
@@ -51,7 +51,7 @@ else ()
     )
 endif()
 
-set_target_properties(ip tests PROPERTIES
+set_target_properties(ip tests ip_filter PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON)
 
