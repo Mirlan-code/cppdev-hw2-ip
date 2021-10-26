@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_CASE(testFinalResult)
     std::vector<std::vector<int>> checkRes = {{1, 2, 3, 46}, {1, 2, 3, 46}, {1, 2, 3, 46}, };
 
     BOOST_CHECK(res.size() == checkRes.size());
-    for (int i = 0; i < checkRes.size(); i++) {
+    for (size_t i = 0; i < checkRes.size(); i++) {
         BOOST_CHECK(res[i].size() == 4);
         for (int j = 0; j < 4; j++) {
             BOOST_CHECK(res[i][j] == checkRes[i][j]);
