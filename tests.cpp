@@ -1,33 +1,32 @@
-#define BOOST_TEST_MODULE test_version
-
 #include "ip_filter.h"
+#include <gtest/gtest.h>
 
-#include <boost/test/unit_test.hpp>
+using namespace std;
 
-BOOST_AUTO_TEST_SUITE(tests)
-
-BOOST_AUTO_TEST_CASE(testSplit)
-{
-    std::string ip = "46.161.56.106";
-    auto res = Split(ip, '.');
-    BOOST_CHECK(res.size() == 4);
-    BOOST_CHECK(res[0] == "46" && res[1] == "161" && res[2] == "56" && res[3] == "106");
+TEST(TestsIpStruct, TestStructFilling) {
+    string s = "1.10.2.255";
+    Ip ip1{s};
+    ASSERT_TRUE(ip1.Ip_[0] == 1);
+    ASSERT_TRUE(ip1.Ip_[1] == 10);
+    ASSERT_TRUE(ip1.Ip_[2] == 2);
+    ASSERT_TRUE(ip1.Ip_[3] == 255);
 }
 
-BOOST_AUTO_TEST_CASE(testFinalResult)
-{
-    std::vector<std::vector<int>> ipPool;
-    ipPool.push_back({1, 2, 3, 46});
-    auto res = GetFinalResult(ipPool);
-    std::vector<std::vector<int>> checkRes = {{1, 2, 3, 46}, {1, 2, 3, 46}, {1, 2, 3, 46}, };
-
-    BOOST_CHECK(res.size() == checkRes.size());
-    for (size_t i = 0; i < checkRes.size(); i++) {
-        BOOST_CHECK(res[i].size() == 4);
-        for (int j = 0; j < 4; j++) {
-            BOOST_CHECK(res[i][j] == checkRes[i][j]);
-        }
-    }
+TEST(TestsIpStruct, TestLess) {
+    string ipStr1 = "1.10.2.2", ipStr2 = "1.2.2.2";
+    Ip ip1{ipStr1};
+    Ip ip2{ipStr2};
+    ASSERT_TRUE(ip2 < ip1);
 }
 
+TEST(TestsSplit, TestSplitNormal) {
+    string s = "1.2.3.4";
+    vector<string> res{"1", "2", "3", "4"};
+    ASSERT_EQ(split(s, '.'), res);
+}
+
+TEST(TestsSplit, TestSplitWithDifferentDelimiters) {
+    string s = "1,111!22- 12.12312.2.3:44.4,2,123";
+    vector<string> res{"1,111!22- 12", "12312", "2", "3:44", "4,2,123"};
+    ASSERT_EQ(split(s, '.'), res);
 }
