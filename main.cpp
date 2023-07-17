@@ -17,7 +17,7 @@ int main() {
 
         for(string line; getline(cin, line);) {
             vector<string> v = split(line, '\t');
-            ipPool.push_back(Ip(v.at(0)));
+            ipPool.emplace_back(Ip(v.at(0)));
         }
 
         sort(ipPool.rbegin(), ipPool.rend());
