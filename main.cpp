@@ -13,6 +13,7 @@ ostream& operator<<(ostream& os, const Ip& ip) {
 int main() {
     try {
         vector<Ip> ipPool;
+        ipPool.reserve(100);
 
         for(string line; getline(cin, line);) {
             vector<string> v = split(line, '\t');
